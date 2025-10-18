@@ -48,10 +48,10 @@
         </div>
 
         <div class="row mt-4">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <button type="submit" class="btn btn-primary w-100">Add News</button>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <a href="{{ url('/') }}" class="btn btn-secondary w-100">Back to news list</a>
             </div>
         </div>

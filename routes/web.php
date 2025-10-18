@@ -11,6 +11,9 @@ Route::get('/news/create', [NewsCreateController::class, 'create'])->name('news.
 Route::get('/news/{id}', [NewController::class, 'show'])->name('news.show');
 Route::post('/news/store', [NewsCreateController::class, 'store'])->name('news.store');
 
+Route::get('/news/{id}/edit', [NewController::class, 'edit'])->name('news.edit');
+Route::put('/news/{id}', [NewController::class, 'update'])->name('news.update');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');

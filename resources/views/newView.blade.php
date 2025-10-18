@@ -9,6 +9,17 @@
 
 <body>
     <div class="container my-4 p-3">
+        <div class="row mb-3">
+            <a href="{{ route('news.edit', $newsItem['id']) }}" class="btn btn-primary col-3">Edit New</a>
+            <div class="border-top mt-3 mb-3"></div>
+        </div>
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        
         <div class="row">
             <h1 class="mb-3 fw-bold text-primary">{{ $newsItem['title'] }}</h1>
 

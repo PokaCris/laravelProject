@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class NewController extends Controller
 {
@@ -121,5 +122,54 @@ class NewController extends Controller
         }
 
         return view('newView', ['newsItem' => $newsItem]);
+    }
+
+    public function edit($id)
+    {
+        $newsFromDB = DB::table('news')->where('id', (int)$id)->first();
+        
+        if ($newsFromDB) {
+            $newsItem = [
+                'id' => $newsFromDB->id,
+                'title' => $newsFromDB->header,
+                'content' => $newsFromDB->article,
+                'image' => $newsFromDB->image
+            ];
+            return view('edit', ['newsItem' => $newsItem]);
+        }
+
+        $newsItem = collect($this->news)->firstWhere('id', (int)$id);
+
+        if (!$newsItem) {
+            abort(404);
+        }
+
+        return view('edit', ['newsItem' => $newsItem]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'sometimes|image|max:2048',
+        ]);
+
+        $updateData = [
+            'header' => $request->input('title'),
+            'article' => $request->input('content'),
+            'updated_at' => now(),
+        ];
+
+        if ($request->hasFile('image')) {
+            $imageData = file_get_contents($request->file('image')->getRealPath());
+            $updateData['image'] = $imageData;
+        }
+
+        DB::table('news')
+            ->where('id', (int)$id)
+            ->update($updateData);
+
+        return redirect()->route('news.show', $id)->with('success', 'News updated successfully!');
     }
 }
